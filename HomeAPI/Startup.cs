@@ -1,3 +1,4 @@
+using HomeAPI.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -9,27 +10,49 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace HomeAPI
 {
     public class Startup
     {
+        private object services;
+
+        private IConfiguration Configuration
+        { get; } = new ConfigurationBuilder()
+ .AddJsonFile("HomeOptions.json")
+ .Build();
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+          //  Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        /// <summary>
+        /// Загрузка конфигурации из файла Json
+        /// </summary>
+        /// 
+       
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Добавляем новый сервис
+            services.Configure<HomeOptions>(Configuration);
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "HomeAPI", Version = "v1" });
+
+            // Подключаем автомаппинг
+            var assembly = Assembly.GetAssembly(typeof(MappingProfile));
+            services.AddAutoMapper(assembly);
+
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "HomeApi",
+                    Version = "v1"
+                });
             });
         }
 
@@ -44,6 +67,8 @@ namespace HomeAPI
             }
 
             app.UseRouting();
+
+
 
             app.UseAuthorization();
 
