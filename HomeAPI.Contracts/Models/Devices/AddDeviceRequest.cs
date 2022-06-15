@@ -1,4 +1,4 @@
-﻿namespace HomeAPI.Contracts.Devices
+﻿namespace HomeAPI.Contracts.Models.Devices
 {
     /// <summary>
     /// Добавляет поддержку нового устройства.

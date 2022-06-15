@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using HomeAPI.Configuration;
-using HomeAPI.Contracts;
+using HomeAPI.Contracts.Models.Home;
 
 namespace HomeAPI
 {
